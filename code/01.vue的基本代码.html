@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--  1.导入vue包  -->
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p>{{msg}}</p>
+    </div>
+
+    <script>
+        <!--    2.创建一个vue 示例   -->
+        //当我们导入包之后，在浏览器的内存中，就多了一个Vue构造函数
+
+        var vue = new Vue({
+            el:"#app",
+            data:{//data属性中，存放的是 el 中要用到的数据
+                msg:"欢迎学习Vue"
+            }
+        })
+    </script>
+</body>
+</html>
