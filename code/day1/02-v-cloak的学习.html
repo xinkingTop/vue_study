@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <!-- 使用 v-cloak 可以解决差值表达式闪烁的问题   -->
+    <p v-cloak>{{msg}}</p>
+
+    <h4 v-text="msg">+++</h4>
+    <!--    v-text 默认没有闪烁问题-->
+    <!--    v-text 会覆盖元素中原本的内容，但是差值表达式只会替换自己的占位符-->
+    <div>{{msg2}}</div>
+    <div v-html="msg2"></div>
+
+<!--    <input type="button" value="按钮" v-bind:title="mytitle">-->
+    <!--  v-bind 指令可以简写为 :要绑定的属性 -->
+    <!--  v-on 指令 提供了时间绑定机制 -->
+
+<!--    <input type="button" value="按钮" :title="mytitle" v-on:click="alert('hello')">-->
+<!--    <input type="button" value="按钮" v-on:click="show">-->
+    <input type="button" value="按钮" @click="show">
+    <!--  v-bind 是Vue中用于绑定属性的指令  -->
+<!--
+    click时间
+
+-->
+</div>
+<script src="../lib/vue-2.4.0.js"></script>
+<script>
+
+    var vue = new Vue({
+        el:"#app",
+        data:{//data属性中，存放的是 el 中要用到的数据
+            msg:123,
+            msg2:"<h1>哈哈，我是一个大大的h1</h1>",
+            mytitle:"这是一个自定义的title"
+        },
+        methods:{
+            show:function () {
+                alert('hello')
+            }
+        }
+    })
+</script>
+</body>
+</html>
