@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>品牌列表</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <script src="../lib/vue-resource-1.3.4.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7.css">
+</head>
+<body>
+
+<div id="app">
+
+    <div class="panel panel-primary">
+    	  <div class="panel-heading">
+    			<h3 class="panel-title">添加品牌</h3>
+    	  </div>
+    	  <div class="panel-body form-inline">
+              <label>
+                  Name:
+                  <input type="text" v-model="name">
+              </label>
+              <input type="button" value="添加" @click="add" class="btn btn-primary">
+    	  </div>
+    </div>
+
+    <table class="table table-bordered table-hover table-striped">
+    	<thead>
+    		<tr>
+    			<th>Id</th>
+    			<th>Name</th>
+    			<th>Ctime</th>
+    			<th>Operation</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    		<tr v-for="item in list" :key="item.id">
+    			<td>{{item.id}}</td>
+    			<td>{{item.name}}</td>
+    			<td>{{item.ctime}}</td>
+    			<td><a href="" @click.prevent="del(item.id)">删除</a></td>
+    		</tr>
+    	</tbody>
+    </table>
+</div>
+
+
+
+<script>
+
+<!--  全局配置了请求数据的接口,则要以 / 结尾  -->
+    Vue.http.options.root = 'http://127.0.0.1:3000/';
+    Vue.http.options.emulateJSON = true;//全局启用emulateJSON 选项
+
+    var vue = new Vue({
+        el:"#app",
+        data:{
+            name:'',
+            list:[
+                // {id:1,name:'五菱宏光',ctime:new Date()},
+                // {id:2,name:'众泰',ctime:new Date()},
+                // {id:1,name:'海马',ctime:new Date()}
+            ]
+        },
+        created(){//当VM 实例的data 和methods 初始化完毕后，vm实例就会自动执行
+            this.getAllList()
+        },
+        methods:{
+            add:function () {//添加品牌列表到后台服务器
+                //发送一个post请求
+                //第三个参数：是一个配置对象，要以哪种表单数据类型提交出去.{emulateJSON:true}
+                //application/x-www-form-urlencoded
+                this.$http.post('api/addproduct',{name:this.name}).then(result =>{
+                    if (result.body.status === 0){
+                        //成功了
+                        this.getAllList()
+                        // console.log(result.body)
+                        this.name = ''
+                    }else {
+                        alert('添加失败')
+                    }
+                })
+            },
+
+            getAllList:function () {//获取所有的品牌列表
+                //
+                this.$http.get('api/getprodlist').then(result =>{
+
+                    var result = result.body
+
+                    if (result.status === 0){
+                        this.list = result.message
+                    }else {
+                        alert('获取数据失败')
+                    }
+                })
+
+            },
+            del:function (id) {//删除品牌
+                this.$http.get('api/delproduct?id=' + id).then(result =>{
+                    if (result.body.status === 0){
+                        this.getAllList()
+                        // console.log(result.body)
+
+
+                    }else {
+                        alert('删除失败')
+                    }
+                })
+            }
+
+
+        }
+    });
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <script src="../lib/vue-resource-1.3.4.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7.css">
+</head>
+<body>
+
+<div id="app">
+    <input type="button" value="get请求" @click="getInfo">
+    <p v-for="item in msg" :key="item.id">{{item.name}}</p>
+</div>
+
+
+
+<script>
+
+    var vue = new Vue({
+        el:"#app",
+        data:{
+            msg:''
+        },
+        methods:{
+            getInfo:function () {
+                //当发起get请求之后，通过.then 来设置成功的回调函数
+                this.$http.get('http://127.0.0.1:8000/api/test_data/').then(function (result) {
+                    //通过result.body拿到服务器返回的数据
+                    console.log(result.body.data)
+                    this.msg = result.body.data
+                })
+
+            }
+        }
+    });
+
+
+</script>
+</body>
+</html>
